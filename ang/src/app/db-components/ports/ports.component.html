@@ -1,0 +1,106 @@
+
+<button (click)="showNewPortModalFunc()" class="btn btn-outline">New port</button>
+
+
+<clr-datagrid>
+
+    <clr-dg-column>Port Name <clr-dg-string-filter [clrDgStringFilter]="nameFilter"></clr-dg-string-filter> </clr-dg-column>
+    <clr-dg-column>LongLat</clr-dg-column>
+    <clr-dg-column>Actions</clr-dg-column>
+
+    <clr-dg-row *clrDgItems="let port of ports">
+
+        <clr-dg-cell>{{port?.name}}</clr-dg-cell>
+        <clr-dg-cell>({{port?.longitude}},{{port?.latitude}})</clr-dg-cell>
+
+        <clr-dg-cell>
+          <clr-icon shape="times" (click)="portToDelete=port; showConfirmDelete=true;"></clr-icon>
+        </clr-dg-cell>
+
+    </clr-dg-row>
+
+    <clr-dg-footer>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} ports
+      <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>
+
+
+
+
+
+<clr-modal [(clrModalOpen)]="showNewPortModal" [clrModalSize]="'lg'">
+    <h3 class="modal-title">Add a new port</h3>
+    <div class="modal-body">
+
+      <form>
+         <section class="form-block">
+
+             <div class="form-group">
+               <label for="port-name">Name: </label>
+               <input id="port-name" type="text" #newPortName />
+             </div>
+            <div class="form-group">
+              <label for="port-lon">Longitude: </label>
+              <input id="port-lon" type="text" #newPortLon />
+            </div>
+            <div class="form-group">
+              <label for="port-lat">Latitude: </label>
+              <input id="port-lat" type="text" #newPortLat />
+            </div>
+
+          </section>
+        </form>
+
+
+        <agm-map
+              #agm
+              style="height:300px;"
+              [latitude]="map?.lat"
+              [longitude]="map?.long"
+              [zoom]="map?.zoom"
+              [disableDefaultUI]="false"
+              [zoomControl]="true"
+              (mapClick)="mapClicked($event); newPortLon.value=$event.coords.lng; newPortLat.value=$event.coords.lat;">
+
+              <agm-marker
+                  *ngIf="map?.marker!=null"
+                  (markerClick)="clickedMarker(map?.marker?.label, i)"
+                  [latitude]="map?.marker?.lat"
+                  [longitude]="map?.marker?.long"
+                  [label]="map?.marker?.label"
+                  [markerDraggable]="map?.marker?.draggable"
+                  (dragEnd)="markerDragEnd(map?.marker, $event)">
+
+                <agm-info-window>
+                  <strong>LongLat = ({{map?.marker?.long}},{{map?.marker?.lat}})</strong>
+                </agm-info-window>
+
+              </agm-marker>
+
+          </agm-map>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="showNewPortModal = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="newPort(newPortName.value, newPortLon.value, newPortLat.value)">Create</button>
+    </div>
+</clr-modal>
+
+
+
+<clr-modal [(clrModalOpen)]="showConfirmDelete" [clrModalSize]="'sm'">
+    <h3 class="modal-title">Confirm deletion</h3>
+    <div class="modal-header">
+        <button aria-label="Close" class="close" type="button">
+            <clr-icon aria-hidden="true" shape="close"></clr-icon>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>This action will delete the port {{portToDelete?.name}}</p>
+    </div>
+    <div class="modal-footer">
+        <button (click)="showConfirmDelete=false;" class="btn btn-outline" type="button">Cancel</button>
+        <button (click)="deletePort(portToDelete?.id); showConfirmDelete=false;" class="btn btn-primary" type="button">Ok</button>
+    </div>
+</clr-modal>

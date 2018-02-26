@@ -1,0 +1,103 @@
+
+<button (click)="showNewVesselModal = true" class="btn btn-outline">New Vessel</button>
+
+
+<clr-datagrid>
+
+    <clr-dg-column> Name <clr-dg-string-filter [clrDgStringFilter]="nameFilter"></clr-dg-string-filter></clr-dg-column>
+    <clr-dg-column>Image</clr-dg-column>
+    <clr-dg-column> Country <clr-dg-string-filter [clrDgStringFilter]="countryFilter"></clr-dg-string-filter></clr-dg-column>
+    <clr-dg-column>Actions</clr-dg-column>
+
+
+    <clr-dg-row *clrDgItems="let vessel of vessels">
+
+        <clr-dg-cell>{{vessel?.name}}</clr-dg-cell>
+
+        <clr-dg-cell *ngIf="vessel?.image==null" ><clr-icon (click)="uploadImageOf(vessel)" shape="folder-open"></clr-icon></clr-dg-cell>
+        <clr-dg-cell *ngIf="vessel?.image!=null">  <image-preview [width]=50 [height]=50 [imageFile]="vessel?.image"></image-preview>   </clr-dg-cell>
+
+        <clr-dg-cell>{{vessel?.country?.name}}</clr-dg-cell>
+
+        <clr-dg-cell>
+          <!--<clr-icon *ngIf="country?.icon!=null" shape="image"></clr-icon>-->
+          <clr-icon shape="times" (click)="showConfirmDelete=true; lastClickedVessel=vessel;"></clr-icon>
+        </clr-dg-cell>
+
+    </clr-dg-row>
+
+    <clr-dg-footer>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} vessels
+      <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>
+
+
+
+
+
+<clr-modal [(clrModalOpen)]="showNewVesselModal">
+    <h3 class="modal-title">Add a new vessel</h3>
+    <div class="modal-body">
+
+       <form>
+          <section class="form-block">
+
+              <div class="form-group">
+                <label for="vessel-name">Vessel Name: </label>
+                <input id="vessel-name" type="text" #newVesselName />
+              </div>
+
+              <div class="form-group">
+                  <label for="vessel-country">Country: </label>
+                  <div class="select">
+                      <select id="vessel-country" #newVesselCountry>
+                          <option></option>
+                          <option *ngFor="let country of countries" value="{{country?.id}}">{{country?.name}}</option>
+                      </select>
+                  </div>
+              </div>
+
+          </section>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="showNewVesselModal = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="newVessel(newVesselName.value, newVesselCountry.value)">Create</button>
+    </div>
+</clr-modal>
+
+
+
+<clr-modal [(clrModalOpen)]="showNewVesselImageModal">
+    <h3 class="modal-title">Set vessel image</h3>
+    <div class="modal-body">
+
+      <label>Name:
+        <input id="icon" type="file" #newImageElem  accept="image/x-png,image/gif,image/jpeg" />
+      </label>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="showNewVesselImageModal = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="saveVesselImage(newImageElem)">Save</button>
+    </div>
+</clr-modal>
+
+
+<clr-modal [(clrModalOpen)]="showConfirmDelete" [clrModalSize]="'sm'">
+    <h3 class="modal-title">Confirm deletion</h3>
+    <div class="modal-header">
+        <button aria-label="Close" class="close" type="button">
+            <clr-icon aria-hidden="true" shape="close"></clr-icon>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>This action will delete the vessel {{lastClickedVessel?.name}}</p>
+    </div>
+    <div class="modal-footer">
+        <button (click)="showConfirmDelete=false;" class="btn btn-outline" type="button">Cancel</button>
+        <button (click)="deleteVessel(lastClickedVessel); showConfirmDelete=false;" class="btn btn-primary" type="button">Ok</button>
+    </div>
+</clr-modal>

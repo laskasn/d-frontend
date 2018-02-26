@@ -1,0 +1,24 @@
+<header class="header-6">
+    <div class="branding">
+        <img style="width: 180px;" src="http://web2.danaos.gr/wp-content/uploads/2016/04/danaos-white3.png" alt="danaos_logo">
+    </div>
+    <div class="header-nav">
+        <a routerLink="/user" (click)="highlight('user')" class="nav-link nav-text" [ngClass]="{true:'active',false:''}[highlights?.user]">User</a>
+        <a routerLink="/admin" (click)="highlight('admin')" class="nav-link nav-text" [ngClass]="{true:'active',false:''}[highlights?.admin]">Admin</a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+          <button class="nav-icon" clrDropdownTrigger>
+              <clr-icon shape="cog"></clr-icon>
+              <clr-icon shape="caret down"></clr-icon>
+          </button>
+          <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+              <a href="..." clrDropdownItem>About</a>
+              <a href="..." clrDropdownItem>Preferences</a>
+              <a href="..." clrDropdownItem>Log out</a>
+          </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+</header>
+
+<router-outlet></router-outlet>

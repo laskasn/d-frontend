@@ -1,0 +1,23 @@
+
+<div class="main-container">
+    <div class="content-container">
+      <div class="content-area">
+        <router-outlet></router-outlet>
+      </div>
+      <nav class="sidenav">
+          <section class="sidenav-content">
+              <a routerLink="/admin/countries" class="nav-link" [ngClass]="{'blue': this.currentTab?.countries == true}" (click)="highlight('countries')">
+                  Countries
+              </a>
+              <a routerLink="/admin/vessels" class="nav-link" [ngClass]="{'blue': this.currentTab?.vessels == true}" (click)="highlight('vessels')">
+                  Vessels
+              </a>
+              <a routerLink="/admin/ports" class="nav-link" [ngClass]="{'blue': this.currentTab?.ports == true}" (click)="highlight('ports')">
+                  Ports
+              </a>
+
+          </section>
+      </nav>
+
+    </div>
+</div>

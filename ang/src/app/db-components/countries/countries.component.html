@@ -1,0 +1,83 @@
+
+<button (click)="showNewCountryModal = true" class="btn btn-outline">New country</button>
+
+
+<clr-datagrid>
+
+    <clr-dg-column> Country Name <clr-dg-string-filter [clrDgStringFilter]="nameFilter"></clr-dg-string-filter></clr-dg-column>
+    <clr-dg-column>Country Flag</clr-dg-column>
+    <clr-dg-column>Actions</clr-dg-column>
+
+
+    <clr-dg-row *clrDgItems="let country of countries">
+
+        <clr-dg-cell> {{country?.name}}</clr-dg-cell>
+
+        <clr-dg-cell *ngIf="country?.icon==null" ><clr-icon (click)="uploadIconOf(country)" shape="folder-open"></clr-icon></clr-dg-cell>
+        <clr-dg-cell *ngIf="country?.icon!=null">  <image-preview [width]=28 [height]=20 [imageFile]="country?.icon"></image-preview>   </clr-dg-cell>
+
+        <clr-dg-cell>
+          <clr-icon shape="times" (click)="lastClickedCountry=country; showConfirmDelete=true;"></clr-icon>
+        </clr-dg-cell>
+
+    </clr-dg-row>
+
+    <clr-dg-footer>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} countries
+      <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+    </clr-dg-footer>
+
+</clr-datagrid>
+
+
+
+
+
+<clr-modal [(clrModalOpen)]="showNewCountryModal">
+    <h3 class="modal-title">Add a new country</h3>
+    <div class="modal-body">
+
+      <label>Name:
+        <input id="name" type="text" #newCountryName />
+      </label>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="showNewCountryModal = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="newCountry(newCountryName.value)">Create</button>
+    </div>
+</clr-modal>
+
+
+
+<clr-modal [(clrModalOpen)]="showNewCountryIconModal">
+    <h3 class="modal-title">Set country flag</h3>
+    <div class="modal-body">
+
+      <label>Name:
+        <input id="icon" type="file" #newIconElem  accept="image/x-png,image/gif,image/jpeg" />
+      </label>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="showNewCountryIconModal = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="saveCountryFlag(newIconElem)">Save</button>
+    </div>
+</clr-modal>
+
+
+<clr-modal [(clrModalOpen)]="showConfirmDelete" [clrModalSize]="'sm'">
+    <h3 class="modal-title">Confirm deletion</h3>
+    <div class="modal-header">
+        <button aria-label="Close" class="close" type="button">
+            <clr-icon aria-hidden="true" shape="close"></clr-icon>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>This action will delete the country {{lastClickedCountry?.name}}</p>
+    </div>
+    <div class="modal-footer">
+        <button (click)="showConfirmDelete=false;" class="btn btn-outline" type="button">Cancel</button>
+        <button (click)="deleteCountry(lastClickedCountry?.id); showConfirmDelete=false;" class="btn btn-primary" type="button">Ok</button>
+    </div>
+</clr-modal>

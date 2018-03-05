@@ -20,7 +20,8 @@ export class AdminComponent implements OnInit {
     this.currentTab = {
       "countries" : false,
       "vessels" : false,
-      "ports" : false
+      "ports" : false,
+      "users" : false
     }
   }
 

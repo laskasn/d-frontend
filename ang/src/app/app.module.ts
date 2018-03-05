@@ -32,6 +32,7 @@ import { RestBase } from './services/rest-base';
 import { CountryService } from './services/country.service';
 import { VesselService } from './services/vessel.service';
 import { PortService } from './services/port.service';
+import { UserService } from './services/user.service';
 import { VisitsService } from './services/visits.service';
 import { LoginService } from './services/login/login.service';
 import { SessionService } from './services/login/session.service';
@@ -58,7 +59,8 @@ const appRoutes: Routes = [
     children: [
       {path: 'countries', component: CountriesComponent, canActivate: [LoginGuardService]},
       {path: 'vessels', component: VesselsComponent, canActivate: [LoginGuardService]},
-      {path: 'ports', component: PortsComponent, canActivate: [LoginGuardService]}
+      {path: 'ports', component: PortsComponent, canActivate: [LoginGuardService]},
+      {path: 'users', component: UsersComponent, canActivate: [LoginGuardService]}
     ]
   },
   { path: 'user',
@@ -143,6 +145,7 @@ const appRoutes: Routes = [
     LoginService,
     LoginGuardService,
     SessionService,
+    UserService,
     RestBase
   ],
   bootstrap: [AppComponent]

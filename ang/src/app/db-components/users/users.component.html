@@ -1,0 +1,20 @@
+
+<clr-datagrid>
+
+    <clr-dg-column>UserName <clr-dg-string-filter [clrDgStringFilter]="nameFilter"></clr-dg-string-filter> </clr-dg-column>
+    <clr-dg-column>Full Name</clr-dg-column>
+    <clr-dg-column>Roles</clr-dg-column>
+
+    <clr-dg-row *clrDgItems="let user of users">
+
+        <clr-dg-cell>{{user?.username}}</clr-dg-cell>
+        <clr-dg-cell>{{user?.fullName}}</clr-dg-cell>
+        <clr-dg-cell>{{user?.role}}</clr-dg-cell>
+
+    </clr-dg-row>
+
+    <clr-dg-footer>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} users
+      <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>

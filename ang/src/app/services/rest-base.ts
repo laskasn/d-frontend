@@ -63,7 +63,7 @@ export class RestBase {
 
         var headers =  new HttpHeaders().set('Content-Type', 'application/json');
 
-        
+
         if(this.sessionService.isLoggedIn()) {
           headers = headers.set('Authorization', 'Basic ' + btoa('%%%custom-token%%%' + ":" + this.sessionService.getToken()));
         }

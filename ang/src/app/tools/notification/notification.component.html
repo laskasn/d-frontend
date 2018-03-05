@@ -1,0 +1,18 @@
+
+<div class="floating-up-left">
+  <clr-alert *ngIf=" type=='success' && visible==true" [clrAlertClosable]="false" [clrAlertType]="'alert-success'">
+      <div class="alert-item">
+          <span class="alert-text">
+              {{text}}
+          </span>
+      </div>
+  </clr-alert>
+
+  <clr-alert *ngIf=" type=='danger' && visible==true" [clrAlertClosable]="false" [clrAlertType]="'alert-danger'">
+      <div class="alert-item">
+          <span class="alert-text">
+              {{text}}
+          </span>
+      </div>
+  </clr-alert>
+</div>

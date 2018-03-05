@@ -1,4 +1,5 @@
 
+
 <div class="row">
     <div class="col-xs-4">
 
@@ -6,7 +7,9 @@
     <div class="col-xs-4">
 
       <div class="login-panel">
-        <h1>Login</h1>
+        <div class="center-div">
+          <h1>Login</h1>
+        </div>
         <form role="form" (submit)="nativeLogin()">
             <section class="form-block">
                 <div class="form-group">
@@ -17,12 +20,16 @@
                     <label for="pw">Password</label>
                     <input name="password" type="password" id="pw" [(ngModel)]="loginData.password">
                 </div>
+                <div class="center-div">
                 <button type="submit" class="btn btn-primary">Login</button>
+                </div>
             </section>
         </form>
 
-        <h2>Social login</h2>
-        <google-signin></google-signin>
+        <div class="center-div">
+          <h2>Social login</h2>
+          <google-signin></google-signin>
+        </div>
 
       </div>
     </div>
@@ -30,3 +37,6 @@
 
     </div>
 </div>
+
+
+<notification [type]='notification.type' [text]='notification.text' [visible]='notification.visible'></notification>

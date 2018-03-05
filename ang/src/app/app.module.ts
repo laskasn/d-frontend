@@ -46,6 +46,7 @@ import { PortsComponent } from './db-components/ports/ports.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { AgmCoreModule } from '@agm/core';
 import { LoginComponent } from './security/login/login.component';
+import { NotificationComponent } from './tools/notification/notification.component';
 
 const appRoutes: Routes = [
   {
@@ -97,7 +98,8 @@ const appRoutes: Routes = [
     VesselRoutesComponent,
     GoogleSigninComponent,
     GoogleSignoutComponent,
-    LoginComponent
+    LoginComponent,
+    NotificationComponent
   ],
   imports: [
     OwlDateTimeModule,

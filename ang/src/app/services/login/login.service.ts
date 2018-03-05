@@ -18,21 +18,9 @@ export class LoginService {
 
 
 
-  authenticate(credentials, loginProvider: LoginProvider) {
+  authenticate(credentials) {
 
-    this.restBase.login('app/login', credentials).subscribe(
-      response => {
-        debugger;
-        this.router.navigate(['/']);
-        this.sessionService.login(response['token'], loginProvider, response['username'], response['roles']);
-        console.log("logged in with token: "+this.sessionService.getToken()+" and roles: "+this.sessionService.getRoles());
-
-      },
-      error => {
-        debugger;
-      }
-
-    );
+    return this.restBase.login('app/login', credentials);
 
   }
 

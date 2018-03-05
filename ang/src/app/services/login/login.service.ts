@@ -19,7 +19,7 @@ export class LoginService {
 
 
   authenticate(credentials) {
-
+    debugger;
     return this.restBase.login('app/login', credentials);
 
   }

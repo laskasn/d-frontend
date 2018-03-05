@@ -9,10 +9,11 @@ declare const gapi: any;
 
 @Component({
   selector: 'google-signin',
+  //templateUrl: './google-signin.component.html',
   styles: [
     'img:hover {cursor: pointer; transform: scale(1.1);}'
   ],
-  template: '<img style="width: 50px;" src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png" alt="Google"> '
+  template:'<img style="width: 50px;" src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png" alt="Google"><notification [type]="notification.type" [text]="notification.text" [visible]="notification.visible"></notification>'
 })
 export class GoogleSigninComponent implements AfterViewInit {
 
@@ -22,6 +23,13 @@ export class GoogleSigninComponent implements AfterViewInit {
     'profile'
     ,'email'
   ].join(' ');
+
+  private notification = {
+      visible : false,
+      text : '',
+      type : ''
+  }
+
 
   public auth2: any;
 
@@ -38,6 +46,7 @@ export class GoogleSigninComponent implements AfterViewInit {
         cookiepolicy: 'single_host_origin',
         scope: that.scope
       });
+      debugger;
       that.attachSignin(that.element.nativeElement.firstChild);
     });
   }
@@ -47,7 +56,7 @@ export class GoogleSigninComponent implements AfterViewInit {
     let that = this;
     this.auth2.attachClickHandler(element, {},
       (googleUser) => {
-
+debugger;
         let profile = googleUser.getBasicProfile();
         /*
         console.log('Token || ' + googleUser.getAuthResponse().id_token);
@@ -67,7 +76,22 @@ export class GoogleSigninComponent implements AfterViewInit {
         }
 
 
-        this.loginService.authenticate(credentials, LoginProvider.google );
+        this.loginService.authenticate(credentials).subscribe(
+          response => {
+            debugger;
+            //this.router.navigate(['/']);
+            this.showNotification("Logged in (social) successfully", "success", 3000 )! //this actually has no effect since we navigate away
+            this.sessionService.login(response['token'], LoginProvider.google, response['username'], response['roles']);
+            console.log("logged in (through google) with token: "+this.sessionService.getToken()+" and roles: "+this.sessionService.getRoles());
+            this.router.navigate(['/']);
+
+          },
+          error => {
+            debugger;
+            this.showNotification("There was an error signing in with google!", "danger", 3000 );
+          }
+
+        );
 
         //window.location.reload();
 
@@ -90,6 +114,18 @@ export class GoogleSigninComponent implements AfterViewInit {
           }
         },1
       );
+  }
+
+  showNotification(text:string, type:string, forMillis: number){
+    this.notification.text=text;
+    this.notification.type=type;
+    this.notification.visible=true;
+    setTimeout( ()=> { this.hideNotification(); }, forMillis);
+  }
+  hideNotification(){
+    this.notification.text='';
+    this.notification.type='';
+    this.notification.visible=false;
   }
 
 }

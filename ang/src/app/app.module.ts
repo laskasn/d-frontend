@@ -47,6 +47,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { AgmCoreModule } from '@agm/core';
 import { LoginComponent } from './security/login/login.component';
 import { NotificationComponent } from './tools/notification/notification.component';
+import { UsersComponent } from './db-components/users/users.component';
 
 const appRoutes: Routes = [
   {
@@ -69,6 +70,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: '',
+    component: AppComponent
   }
   /*{
     path: 'heroes',
@@ -99,7 +104,8 @@ const appRoutes: Routes = [
     GoogleSigninComponent,
     GoogleSignoutComponent,
     LoginComponent,
-    NotificationComponent
+    NotificationComponent,
+    UsersComponent
   ],
   imports: [
     OwlDateTimeModule,

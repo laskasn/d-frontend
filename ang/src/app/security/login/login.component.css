@@ -1,0 +1,10 @@
+.login-panel {
+  background-color: #f2f9ff;
+  border-radius: 25px;
+  padding: 10px;
+  box-shadow: 5px 10px 18px #888888;
+  /*
+  border-style: solid;
+  border-width: 1px;
+  */
+}

@@ -1,15 +1,16 @@
-import { HttpClient , HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient , HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+import { SessionService, LoginProvider } from './login/session.service';
 
 import 'rxjs/Rx';
 
 
 export class RestBase {
 
+    //static get parameters() { return [HttpClient] }
+    static get parameters() { return [HttpClient, SessionService] }
 
-
-    static get parameters() { return [HttpClient] }
-
-    constructor(public http : HttpClient) {
+    constructor(public http : HttpClient, private sessionService: SessionService) {
 
     }
 
@@ -17,7 +18,7 @@ export class RestBase {
     protocol: string = "http";
     hostname: string = "localhost";
     port: number = 8080;
-    webappname: string = "danaos";
+    webappname: string = "";
     restpath: string = "";
 
 
@@ -25,7 +26,12 @@ export class RestBase {
     restPath: string = this.protocol+"://"+this.hostname+":"+this.port+"/"+this.webappname+"/"+this.restpath+"/";
 
 
-
+    public login(path: string, credentials: any) : Observable<HttpResponse<any>>{
+      const headers = new HttpHeaders(credentials ? {
+          authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+      } : {});
+      return this.http.get<any>(this.restPath + path, {headers: headers /*, observe: 'response', withCredentials: true */});
+    }
 
     public get(path : string, params? : any){
         var options = this.createOptions(params);
@@ -56,6 +62,12 @@ export class RestBase {
         }
 
         var headers =  new HttpHeaders().set('Content-Type', 'application/json');
+
+        
+        if(this.sessionService.isLoggedIn()) {
+          headers = headers.set('Authorization', 'Basic ' + btoa('%%%custom-token%%%' + ":" + this.sessionService.getToken()));
+        }
+
         let options = { params: params, headers: headers };
         return options;
     }

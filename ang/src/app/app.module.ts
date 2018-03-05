@@ -6,26 +6,38 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 import { ClarityModule } from 'clarity-angular';
 
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 
 import { HttpModule } from '@angular/http';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+
+import { GlobalInterceptor } from './services/interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AdminComponent } from './nav-components/admin/admin.component';
 import { UserComponent } from './nav-components/user/user.component';
 
+import { GoogleSigninComponent } from './security/external/google-signin.component';
+import { GoogleSignoutComponent } from './security/external/google-signout.component';
 
 import { CountriesComponent } from './db-components/countries/countries.component';
 import { VesselRoutesComponent } from './db-components/vesselroutes/vesselroutes.component';
+
 
 import { RestBase } from './services/rest-base';
 import { CountryService } from './services/country.service';
 import { VesselService } from './services/vessel.service';
 import { PortService } from './services/port.service';
 import { VisitsService } from './services/visits.service';
+import { LoginService } from './services/login/login.service';
+import { SessionService } from './services/login/session.service';
+import { LoginGuardService } from './services/login/login-guard.service';
+
+import {LocalStorageService} from 'ngx-webstorage';
 
 import { ImagePreviewComponent } from './tools/image-preview/image-preview.component';
 import { VesselsComponent } from './db-components/vessels/vessels.component';
@@ -33,23 +45,30 @@ import { PortsComponent } from './db-components/ports/ports.component';
 
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { AgmCoreModule } from '@agm/core';
+import { LoginComponent } from './security/login/login.component';
 
 const appRoutes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivate: [LoginGuardService],
     children: [
-      {path: 'countries', component: CountriesComponent},
-      {path: 'vessels', component: VesselsComponent},
-      {path: 'ports', component: PortsComponent}
+      {path: 'countries', component: CountriesComponent, canActivate: [LoginGuardService]},
+      {path: 'vessels', component: VesselsComponent, canActivate: [LoginGuardService]},
+      {path: 'ports', component: PortsComponent, canActivate: [LoginGuardService]}
     ]
   },
   { path: 'user',
     component: UserComponent,
+    canActivate: [LoginGuardService],
     children: [
-      {path: 'vesselroutes/:vesselID', component: VesselRoutesComponent}
+      {path: 'vesselroutes/:vesselID', component: VesselRoutesComponent, canActivate: [LoginGuardService]}
     ]
   },
+  {
+    path: 'login',
+    component: LoginComponent,
+  }
   /*{
     path: 'heroes',
     component: HeroListComponent,
@@ -75,7 +94,10 @@ const appRoutes: Routes = [
     VesselsComponent,
     VesselRoutesComponent,
     PortsComponent,
-    VesselRoutesComponent
+    VesselRoutesComponent,
+    GoogleSigninComponent,
+    GoogleSignoutComponent,
+    LoginComponent
   ],
   imports: [
     OwlDateTimeModule,
@@ -97,7 +119,23 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     ClarityModule
   ],
-  providers: [AppService, CountryService, VesselService, PortService, VisitsService, RestBase],
+  providers: [
+    LocalStorageService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: GlobalInterceptor,
+      multi: true,
+    },
+    AppService,
+    CountryService,
+    VesselService,
+    PortService,
+    VisitsService,
+    LoginService,
+    LoginGuardService,
+    SessionService,
+    RestBase
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

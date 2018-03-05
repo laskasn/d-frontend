@@ -76,15 +76,15 @@ debugger;
         }
 
 
+
         this.loginService.authenticate(credentials).subscribe(
           response => {
             debugger;
-            //this.router.navigate(['/']);
             this.showNotification("Logged in (social) successfully", "success", 3000 )! //this actually has no effect since we navigate away
             this.sessionService.login(response['token'], LoginProvider.google, response['username'], response['roles']);
             console.log("logged in (through google) with token: "+this.sessionService.getToken()+" and roles: "+this.sessionService.getRoles());
             this.router.navigate(['/']);
-
+            location.reload();
           },
           error => {
             debugger;

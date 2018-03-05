@@ -1,11 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 
 import { ClarityModule } from 'clarity-angular';
 
@@ -49,6 +49,7 @@ import { LoginComponent } from './security/login/login.component';
 import { NotificationComponent } from './tools/notification/notification.component';
 import { UsersComponent } from './db-components/users/users.component';
 
+
 const appRoutes: Routes = [
   {
     path: 'admin',
@@ -70,10 +71,6 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-  },
-  {
-    path: '',
-    component: AppComponent
   }
   /*{
     path: 'heroes',
@@ -133,6 +130,10 @@ const appRoutes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: GlobalInterceptor,
       multi: true,
+    },
+    {
+      provide: APP_BASE_HREF,
+      useValue : '/'
     },
     AppService,
     CountryService,
